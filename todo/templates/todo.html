@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <!-- Tailwind CSS từ CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        overflow: auto;
+        background: #0f172a; /* Fallback nền tối */
+      }
+      h1,
+      input,
+      button,
+      p {
+        text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+      }
+      .progress-bar {
+        height: 1rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 0.5rem;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(to right, #4ade80, #22d3ee);
+        transition: width 0.3s ease-in-out;
+        min-width: 2px; /* Đảm bảo hiển thị khi width=0 */
+      }
+      .Todo {
+        position: relative;
+      }
+      .todo-content {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.25rem;
+      }
+      .todo-actions {
+        display: flex;
+        justify-content: space-between; /* Deadline bên trái, nút bên phải */
+        align-items: center;
+      }
+      .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-left: auto; /* Đẩy nút sát phải */
+      }
+    </style>
+  </head>
+  <body class="relative flex items-center justify-center min-h-screen">
+    <div class="absolute top-5 right-5 z-50">
+      <a
+        href="{% url 'logoutt' %}"
+        class="flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-2 rounded-lg text-white text-sm hover:bg-white/20 transition"
+      >
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+    <div class="animated-bg"></div>
+    <div class="signup-login max-w-lg w-full px-6 py-12">
+      <div class="mb-6">
+        <h1 class="text-2xl font-bold text-center text-white">
+          HELLO, {{ user.username }}!
+        </h1>
+        <!-- Phần trăm tiến độ -->
+        <div class="mt-4">
+          <p class="text-center text-white/80">
+            Tiến độ: {{ progress_percentage|default:0|floatformat:0 }} %
+          </p>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              style="width: {% if progress_percentage is not None %}{{ progress_percentage }}{% else %}0{% endif %}%;"
+            ></div>
+          </div>
+        </div>
+      </div>
+      <div class="signup-box rounded-2xl p-12">
+        <h1
+          class="text-4xl font-extrabold text-center text-white mb-8 bg-clip-text bg-gradient-to-r from-yellow-400 to-blue-500"
+        >
+          GET THINGS DONE?
+        </h1>
+        <form method="post" id="todo-form">
+          {% csrf_token %}
+          <div class="field mb-6 relative">
+            <div class="input-wrapper">
+              <i
+                class="fas fa-tasks absolute left-4 top-1/2 transform -translate-y-1/2 text-yellow-400"
+              ></i>
+              <input
+                type="text"
+                name="title"
+                required
+                class="w-full pl-12 pr-4 py-3 bg-transparent border border-white/50 rounded-lg text-white placeholder-white/60 focus:outline-none"
+                placeholder="Add today's task"
+              />
+            </div>
+          </div>
+          <div class="field mb-6 relative">
+            <div class="input-wrapper">
+              <i
+                class="fas fa-calendar-alt absolute left-4 top-1/2 transform -translate-y-1/2 text-yellow-400"
+              ></i>
+              <input
+                type="datetime-local"
+                name="deadline"
+                class="w-full pl-12 pr-4 py-3 bg-transparent border border-white/50 rounded-lg text-white placeholder-white/60 focus:outline-none"
+                placeholder="Select deadline"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <button
+              type="submit"
+              class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-lg font-semibold relative overflow-hidden"
+            >
+              <span class="button-text">ADD TASK</span>
+              <span class="button-loading hidden"
+                ><i class="fas fa-spinner fa-spin"></i
+              ></span>
+            </button>
+          </div>
+        </form>
+        <div class="todo-list mt-8">
+          {% for todo in res %}
+          <div
+            class="Todo bg-white/10 border border-white/20 rounded-lg p-4 mb-4 transition-all duration-300"
+          >
+            <div class="todo-content">
+              <!-- Thứ tự -->
+              <span class="text-sm text-white/60 mr-2"
+                >{{ forloop.counter }}</span
+              >
+              <!-- Tiêu đề và trạng thái -->
+              <p
+                class="text-white text-lg flex-1 {% if todo.status == 'COMPLETED' %}line-through text-white/60{% endif %}"
+              >
+                {{ todo.title }}
+              </p>
+            </div>
+            <div class="todo-actions">
+              {% if todo.deadline %}
+              <p class="text-white/50 text-sm mr-4">
+                <i class="fa-regular fa-clock"></i>
+                {{ todo.deadline|date:"d/m/Y H:i" }} {% if todo.is_urgent %}
+                <i
+                  class="fas fa-exclamation-circle text-red-400 ml-1"
+                  title="Sắp hết hạn!"
+                ></i>
+                {% endif %}
+              </p>
+              {% else %}
+              <span class="text-transparent">Placeholder</span>
+              <!-- Giữ khoảng trống khi không có deadline -->
+              {% endif %}
+              <div class="action-buttons">
+                <!-- Nút chuyển đổi trạng thái -->
+                <form
+                  action="{% url 'toggle_todo' todo.srno %}"
+                  method="POST"
+                  class="inline"
+                >
+                  {% csrf_token %}
+                  <button
+                    type="submit"
+                    class="todo-action text-{% if todo.status == 'COMPLETED' %}green-400 hover:text-green-300{% else %}yellow-400 hover:text-yellow-300{% endif %} transition"
+                    title="{% if todo.status == 'COMPLETED' %}Hoàn thành{% else %}Chưa hoàn thành{% endif %}"
+                  >
+                    <i
+                      class="fa-solid {% if todo.status == 'COMPLETED' %}fa-circle-check{% else %}fa-arrow-rotate-left{% endif %} text-lg"
+                    ></i>
+                  </button>
+                </form>
+                <!-- Nút chỉnh sửa -->
+                <a
+                  href="{% url 'edit_todo' todo.srno %}"
+                  class="todo-action text-yellow-400 hover:text-yellow-300"
+                  title="Edit"
+                >
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <!-- Nút xóa -->
+                <a
+                  href="{% url 'delete_todo' todo.srno %}"
+                  class="todo-action text-red-400 hover:text-red-300"
+                  title="Delete"
+                  onclick="return confirm('Bạn có chắc muốn xóa nhiệm vụ này?')"
+                >
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <p class="text-center text-white/80">No tasks yet. Add one above!</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Hiệu ứng loading cho button
+      document
+        .getElementById("todo-form")
+        .addEventListener("submit", function () {
+          const button = this.querySelector("button");
+          button.querySelector(".button-text").classList.add("hidden");
+          button.querySelector(".button-loading").classList.remove("hidden");
+          button.disabled = true;
+        });
+    </script>
+    <script>
+      function dismissAlert(alert) {
+        alert.classList.add("opacity-0", "translate-x-10");
+        setTimeout(() => alert.remove(), 900);
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const alerts = document.querySelectorAll("#alert-container .alert");
+        alerts.forEach((alert) => {
+          setTimeout(() => dismissAlert(alert), 1000);
+        });
+      });
+    </script>
+    {% if messages %}
+    <div id="alert-container" class="fixed top-5 right-5 z-50 space-y-2">
+      {% for message in messages %}
+      <div
+        class="alert bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between transition-all duration-700 transform opacity-100 translate-x-0"
+      >
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-circle-check text-lg"></i>
+          <span class="font-medium">{{ message }}</span>
+        </div>
+        <button
+          onclick="dismissAlert(this.parentElement)"
+          class="ml-4 text-white hover:text-gray-200"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </body>
+</html>

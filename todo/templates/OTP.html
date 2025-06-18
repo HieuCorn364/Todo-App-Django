@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>Xác nhận OTP</h2>
+    <p>Mã OTP đã được gửi đến email {{ email }}</p>
+    <form method="post">
+      {% csrf_token %}
+      <input type="text" name="otp" placeholder="Nhập mã OTP" required />
+      <button type="submit">Xác nhận</button>
+    </form>
+  </body>
+</html>

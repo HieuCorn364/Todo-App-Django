@@ -1,0 +1,289 @@
+/* Mystical black animated background */
+.animated-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    #0f0f0f,
+    #1a1a1a,
+    #2d2d2d,
+    #0f0f0f
+  ); /* Gradient tối */
+  background-size: 200%;
+  animation: subtlePulse 10s ease-in-out infinite; /* Hiệu ứng nhịp đập nhẹ */
+  z-index: -1;
+}
+
+@keyframes subtlePulse {
+  0% {
+    background-position: 0% 0%;
+    opacity: 0.9;
+  }
+  50% {
+    background-position: 100% 100%;
+    opacity: 1;
+  }
+  100% {
+    background-position: 0% 0%;
+    opacity: 0.9;
+  }
+}
+
+/* Glassmorphism form container */
+.signup-box {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.03)
+  );
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  animation: float 6s ease-in-out infinite;
+  max-width: 48rem;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.signup-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Input enhancements */
+.field {
+  margin-bottom: 1rem;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+input {
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 5px rgba(250, 204, 21, 0.2);
+  animation: fadeIn 0.5s ease-out;
+}
+
+input:focus {
+  border-color: #1e3a8a; /* Màu xanh đậm */
+  box-shadow: 0 0 12px rgba(30, 58, 138, 0.6);
+  transform: scale(1.02);
+}
+
+input::placeholder {
+  transition: opacity 0.3s ease;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+input:focus::placeholder {
+  opacity: 0.2;
+}
+
+/* Button enhancements */
+button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  background: rgba(30, 58, 138, 0.8); /* Màu xanh đậm */
+}
+
+button:hover {
+  background: linear-gradient(to right, #1e3a8a, #4b5bd7);
+  box-shadow: 0 0 15px rgba(30, 58, 138, 0.5);
+  transform: translateY(-2px);
+}
+
+button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s ease, height 0.5s ease;
+}
+
+button:hover::after {
+  width: 250%;
+  height: 250%;
+}
+
+/* Button loading state */
+.button-loading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Icon styling */
+.input-wrapper i {
+  transition: color 0.3s ease;
+}
+
+.input-wrapper i:hover {
+  color: #facc15;
+}
+
+/* Neon glow for inputs and buttons */
+input,
+button,
+.todo-action {
+  position: relative;
+}
+
+input::before,
+button::before,
+.todo-action::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 8px;
+  padding: 2px;
+  background: linear-gradient(45deg, #facc15, #1e3a8a);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+input:focus::before,
+button:hover::before,
+.todo-action:hover::before {
+  opacity: 0.7;
+}
+
+/* Todo list styling */
+.todo-list {
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.todo-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.todo-list::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.Todo {
+  transition: all 0.3s ease;
+}
+
+.Todo:hover {
+  transform: translateY(-2px);
+}
+
+/* Todo action styling */
+.todo-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 4px;
+}
+
+/* Disable underline effect for todo action links */
+.todo-action::after {
+  display: none;
+}
+
+/* Thêm style cho tiêu đề dài */
+.task-title {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.task-title:hover {
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+}
+
+/* Animation for elements */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .signup-login {
+    padding: 0.5rem;
+  }
+
+  .signup-box {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    max-width: 100%;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  input {
+    padding: 0.5rem 2rem;
+    font-size: 0.8rem;
+  }
+
+  button {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .text-sm {
+    font-size: 0.75rem;
+  }
+
+  .todo-grid {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .Todo {
+    padding: 0.5rem;
+  }
+
+  .todo-action {
+    margin-left: 0.25rem;
+  }
+}

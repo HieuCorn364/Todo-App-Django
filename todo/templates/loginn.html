@@ -1,0 +1,86 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <!-- Tailwind CSS từ CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Poppins -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+    />
+    <!-- Liên kết file CSS riêng -->
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+
+  <body class="relative flex items-center justify-center min-h-screen">
+    <div class="animated-bg"></div>
+    <div class="signup-login max-w-md w-full px-4">
+      <div class="signup-box rounded-2xl p-8">
+        <form method="post">
+          {% csrf_token %}
+          <h1 class="text-4xl font-bold text-center text-white mb-6">Login</h1>
+
+          <div class="border-t border-white/20 mb-6"></div>
+
+          <div class="field mb-6">
+            <label class="block text-sm font-medium text-white mb-2"
+              >Username</label
+            >
+            <input
+              class="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none"
+              type="text"
+              name="fnm"
+              required
+              placeholder="Enter Your Full Name"
+            />
+          </div>
+
+          <div class="field mb-8">
+            <label class="block text-sm font-medium text-white mb-2"
+              >Password</label
+            >
+            <input
+              class="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none"
+              type="password"
+              name="pwd"
+              required
+              placeholder="Enter Password"
+            />
+          </div>
+
+          <div class="field mb-6">
+            <button
+              type="submit"
+              class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-medium"
+            >
+              Sign Up
+            </button>
+          </div>
+
+          <div class="border-t border-white/20 mb-6"></div>
+
+          <div class="field text-center">
+            <p class="text-sm text-white/80">
+              Don't have an account
+              <a href="/" class="text-yellow-400 font-medium">Register</a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

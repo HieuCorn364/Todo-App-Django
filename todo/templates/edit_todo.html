@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <!-- Tailwind CSS từ CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Poppins -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Liên kết file styles.css -->
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+  </head>
+  <body class="relative flex items-center justify-center min-h-screen">
+    <div class="animated-bg"></div>
+    <div class="signup-login max-w-lg w-full px-6 py-12">
+      <div class="mb-6">
+        <h1 class="text-2xl font-bold text-center text-white">
+          HELLO, {{user}}!
+        </h1>
+      </div>
+      <div class="signup-box rounded-2xl p-10">
+        <h1
+          class="text-4xl font-extrabold text-center text-white mb-8 bg-clip-text bg-gradient-to-r from-yellow-400 to-blue-500"
+        >
+          EDIT TASK
+        </h1>
+        <form method="post" id="edit-todo-form">
+          {% csrf_token %}
+          <div class="field mb-6 relative">
+            <div class="input-wrapper">
+              <i
+                class="fas fa-tasks absolute left-4 top-1/2 transform -translate-y-1/2 text-yellow-400"
+              ></i>
+              <input
+                type="text"
+                name="title"
+                required
+                class="w-full pl-12 pr-4 py-3 bg-transparent border border-white/50 rounded-lg text-white placeholder-white/60 focus:outline-none"
+                placeholder="Edit task title"
+                value="{{ todo }}"
+              />
+            </div>
+          </div>
+          <div class="field mb-6 flex items-center">
+            <input
+              type="checkbox"
+              name="status"
+              id="status"
+              class="h-5 w-5 text-yellow-400 focus:ring-yellow-400 border-white/50 rounded mr-3"
+              {%
+              if
+              todo.status
+              %}checked{%
+              endif
+              %}
+            />
+            <label for="status" class="text-white text-sm font-semibold"
+              >Completed</label
+            >
+          </div>
+          <div class="field mb-6">
+            <button
+              type="submit"
+              class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-lg font-semibold relative overflow-hidden"
+            >
+              <span class="button-text">SAVE</span>
+              <span class="button-loading hidden"
+                ><i class="fas fa-spinner fa-spin"></i
+              ></span>
+            </button>
+          </div>
+          <div class="field text-center">
+            <a
+              href="{% url 'todopage' %}"
+              class="text-yellow-400 hover:text-yellow-300 font-semibold text-sm"
+            >
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
